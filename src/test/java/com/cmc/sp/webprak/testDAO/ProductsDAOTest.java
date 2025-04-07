@@ -75,6 +75,12 @@ public class ProductsDAOTest {
 
         Products deletedBook = productsDAO.getById(3L);
         assertNull(deletedBook);
+
+        Products laptop = productsDAO.getById(2L);
+        productsDAO.deleteById(laptop.getId());
+
+        Products deletedLaptop = productsDAO.getById(3L);
+        assertNull(deletedLaptop);
     }
 
     @BeforeEach
