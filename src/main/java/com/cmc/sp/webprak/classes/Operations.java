@@ -23,6 +23,7 @@ public class Operations implements InheritedInterface<Long>{
     @Column(nullable = false, name = "operation_id")
     private Long id;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false, name = "operation_type")
     @lombok.NonNull
     private OperationType operationType;

@@ -3,25 +3,27 @@ package com.cmc.sp.webprak.DAO;
 import com.cmc.sp.webprak.classes.*;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public class OperationDetailsDAO extends InheritedDAO<OperationDetails, Long>{
-    public OperationDetailsDAO(Class<OperationDetails> entityClass) {
-        super(entityClass);
+    public OperationDetailsDAO() {
+        super(OperationDetails.class);
     }
 
-    List<OperationDetails> getOperationsDetailsByOperation(Operations operation) {
+    public List<OperationDetails> getOperationsDetailsByOperation(Operations operation) {
         try (Session session = sessionFactory.openSession()) {
-            Query<OperationDetails> query = session.createQuery("FROM operation_details WHERE operation_id = :gotOperation", OperationDetails.class)
-                    .setParameter("gotOperation", operation.getId());
+            Query<OperationDetails> query = session.createQuery("FROM OperationDetails WHERE operation = :gotOperation", OperationDetails.class)
+                    .setParameter("gotOperation", operation);
             return query.getResultList().isEmpty() ? null : query.getResultList();
         }
     };
-    List<OperationDetails> getOperationsDetailsByProduct(Products product) {
+    public List<OperationDetails> getOperationsDetailsByProduct(Products product) {
         try (Session session = sessionFactory.openSession()) {
-            Query<OperationDetails> query = session.createQuery("FROM operation_details WHERE product = :gotProduct", OperationDetails.class)
-                    .setParameter("gotProduct", product.getId());
+            Query<OperationDetails> query = session.createQuery("FROM OperationDetails WHERE product = :gotProduct", OperationDetails.class)
+                    .setParameter("gotProduct", product);
             return query.getResultList().isEmpty() ? null : query.getResultList();
         }
     };

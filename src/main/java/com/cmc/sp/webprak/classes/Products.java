@@ -23,12 +23,10 @@ public class Products implements InheritedInterface<Long>{
     @lombok.NonNull
     private String name;
 
-    @Column(nullable = false, name = "category")
-    @lombok.NonNull
+    @Column(name = "category")
     private String category;
 
-    @Column(nullable = false, name = "expiration_date")
-    @lombok.NonNull
+    @Column(name = "expiration_date")
     private Date expirationDate;
 
     @Column(name = "quantity")

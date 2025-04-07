@@ -31,6 +31,7 @@ public class Partners implements InheritedInterface<Long>{
     @lombok.NonNull
     private String contactInfo;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false, name = "partner_type")
     @lombok.NonNull
     private PartnerType partnerType;

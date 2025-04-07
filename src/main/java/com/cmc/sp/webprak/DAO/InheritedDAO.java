@@ -2,6 +2,7 @@ package com.cmc.sp.webprak.DAO;
 
 import  com.cmc.sp.webprak.classes.InheritedInterface;
 
+import java.lang.reflect.ParameterizedType;
 import java.util.Collection;
 
 
@@ -18,12 +19,11 @@ import java.util.Collection;
 @Repository
 public abstract class InheritedDAO<T extends InheritedInterface<ID>, ID extends Serializable>{
 
+    protected final Class<T> persistentClass;
     protected SessionFactory sessionFactory;
 
-    protected Class<T> persistentClass;
-
-    public InheritedDAO(Class<T> entityClass){
-        this.persistentClass = entityClass;
+    public InheritedDAO(Class<T> persistentClass) {
+        this.persistentClass = persistentClass;
     }
 
     @Autowired
