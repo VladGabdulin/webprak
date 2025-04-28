@@ -1,0 +1,64 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Товары</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <style>
+        .indent {
+            margin-left: 30px;
+            margin-right: 30px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="template_page :: page-header"> </div>
+
+<div class="indent">
+    <a th:href="@{/products/edit(productId=0)}" class="btn btn-primary">Добавить товар</a>
+    <br>
+
+    <table class="table table-bordered table-warning">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col"> Название товара</th>
+            <th scope="col"> Категория</th>
+            <th scope="col"> Срок годности</th>
+            <th scope="col"> Количество</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="${products.isEmpty()}">
+            <td colspan="6"> В базе пока нет ни одного товара. <a th:href="'/products/edit?productId=' + 0">Добавить?</a></td>
+        </tr>
+        <tr th:each="product : ${products}">
+            <td>
+                <a th:href="'/product?productId=' + ${product.getId()}">
+                    <span th:text="${product.getName()}"> </span>
+                </a>
+            </td>
+            <td>
+                <span th:text="${product.getCategory()}"> </span>
+            </td>
+            <td>
+                <span th:text="${product.getExpirationDate()}"> </span>
+            </td>
+            <td>
+                <span th:text="${product.getQuantity()}"> </span>
+            </td>
+            <td>
+                <a th:href="'/products/edit?productId=' + ${product.getId()}"
+                   class="btn btn-sm btn-warning">Редактировать</a>
+            </td>
+        </tr>
+
+        </tbody>
+    </table>
+</div>
+
+<div th:replace="template_page :: site-script"></div>
+
+</body>
+</html>

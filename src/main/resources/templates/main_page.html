@@ -1,0 +1,31 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <title>Главная страница</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <style>
+    .indent {
+      margin-left: 30px;
+      margin-right: 30px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<div th:replace="template_page :: page-header"></div>
+
+<div class="indent">
+  <h3 class="text-center">Система управления складским учётом</h3>
+  <br>
+  <span class="text-center indent"> Сайт позволяет добавлять, редактировать, удалять и получать информацию о содержимом складов, поставках, поставщиках </span>
+  <br>
+  <div th:replace="template_page :: site-footer"></div>
+</div>
+
+<div th:replace="template_page :: site-script"></div>
+
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Информация о товаре</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <style>
+        .indent {
+            margin-left: 30px;
+            margin-right: 30px;
+            margin-top: 20px;
+        }
+        .product-details {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .operations {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="template_page :: page-header"> </div>
+
+<div class="indent">
+    <div class="product-details">
+        <h2 th:text="${product.name}">Название товара</h2>
+        <hr>
+        <p><strong>Категория:</strong> <span th:text="${product.category}">Категория</span></p>
+        <p><strong>Срок годности:</strong> <span th:text="${product.expirationDate}">Срок годности</span></p>
+        <p><strong>Количество:</strong> <span th:text="${product.quantity}">Количество</span></p>
+        <a href="/products" class="btn btn-secondary">Вернуться к списку</a>
+    </div>
+</div>
+
+<div class="mt-4">
+    <div class="operations">
+        <h3>История операций</h3>
+        <table class="table table-bordered">
+            <thead class="thead-light">
+            <tr>
+                <th>Дата</th>
+                <th>Тип операции</th>
+                <th>Изменение количества</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="operationDetail : ${operationDetails}">
+                <td th:text="${operationDetailsService.getOperationByOperationDetails(operationDetail).getOperationDate()}"></td>
+                <td>
+                    <span th:if="${operationDetailsService.getOperationByOperationDetails(operationDetail).getOperationType().name() == 'in'}" class="badge badge-success">Поступление</span>
+                    <span th:if="${operationDetailsService.getOperationByOperationDetails(operationDetail).getOperationType().name() == 'out'}" class="badge badge-danger">Выдача</span>
+                </td>
+                <td th:text="${operationDetail.quantity}"></td>
+            </tr>
+            <tr th:if="${operationDetails} != null">
+                <tr th:if="${operationDetails.isEmpty()}">
+                    <td colspan="4">Нет данных об операциях</td>
+                </tr>
+            </tr>
+            <tr th:if="${operationDetails} == null">
+                <td colspan="4">Нет данных об операциях</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div th:replace="template_page :: site-script"></div>
+</body>
+</html>

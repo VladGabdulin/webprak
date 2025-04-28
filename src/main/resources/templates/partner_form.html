@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title th:text="${isEdit} ? 'Редактирование партнёра' : 'Добавление партнёра'"></title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<div th:replace="template_page :: page-header"> </div>
+
+<div class="container mt-4">
+    <h2 th:text="${isEdit} ? 'Редактирование партнёра' : 'Добавление партнёра'"></h2>
+
+    <form th:action="@{/partners/save}" method="post" th:object="${partner}">
+        <input type="hidden" th:field="*{id}">
+
+        <div class="form-group">
+            <label>Имя партнёра</label>
+            <input type="text" class="form-control" th:field="*{name}" required>
+        </div>
+
+        <div class="form-group">
+            <label>Контактная информация</label>
+            <input type="text" class="form-control" th:field="*{contactInfo}" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+            <span th:text="${isEdit} ? 'Обновить' : 'Добавить'"></span>
+        </button>
+        <a th:href="@{/partners}" class="btn btn-secondary">Отмена</a>
+    </form>
+</div>
+
+<div th:replace="template_page :: site-script"></div>
+</body>
+</html>
