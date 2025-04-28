@@ -27,4 +27,7 @@ public class OperationDetailsDAO extends InheritedDAO<OperationDetails, Long>{
             return query.getResultList().isEmpty() ? null : query.getResultList();
         }
     };
+    public Operations getOperationByOperationDetails(OperationDetails operationDetails) {
+        return operationDetails.getOperation();
+    }
 }
