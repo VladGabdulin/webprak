@@ -14,10 +14,10 @@
     </style>
 </head>
 <body>
-<div th:replace="template_page :: page-header"> </div>
+<div th:replace="~{template_page :: page-header}"> </div>
 
-<div class="indent">
-    <a th:href="@{/partners/edit(partnerId=0)}" class="btn btn-primary">Добавить партнёра</a>
+<div class="indent" id="partnerInfo">
+    <a th:href="'/add_partner'" id="AddPartnerButton" class="btn btn-primary">Добавить партнёра</a>
     <br>
 
     <table class="table table-bordered table-warning">
@@ -30,7 +30,7 @@
         </thead>
         <tbody>
         <tr th:if="${partners.isEmpty()}">
-            <td colspan="6"> В базе пока нет ни одного партнёра. <a th:href="'/partners/edit?partnerId=' + 0">Добавить?</a></td>
+            <td colspan="6"> В базе пока нет ни одного партнёра. <a th:href="'/add_partner'">Добавить?</a></td>
         </tr>
         <tr th:each="partner : ${partners}">
             <td>
@@ -54,7 +54,7 @@
     </table>
 </div>
 
-<div th:replace="template_page :: site-script"></div>
+<div th:replace="~{template_page :: site-script}"></div>
 
 </body>
 </html>

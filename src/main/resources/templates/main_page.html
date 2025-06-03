@@ -4,6 +4,7 @@
   <title>Главная страница</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
   <style>
     .indent {
@@ -11,21 +12,144 @@
       margin-right: 30px;
       margin-top: 20px;
     }
+    .dashboard-card {
+      transition: all 0.3s ease;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+      height: 100%;
+    }
+    .dashboard-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+    .card-icon {
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+    }
+    .welcome-section {
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      border-radius: 10px;
+      padding: 30px;
+      margin-bottom: 30px;
+    }
+    .stats-card {
+      background: white;
+      border-left: 4px solid;
+      border-radius: 5px;
+    }
+    .stats-card.operations {
+      border-left-color: #17a2b8;
+    }
+    .stats-card.products {
+      border-left-color: #28a745;
+    }
+    .stats-card.partners {
+      border-left-color: #ffc107;
+    }
   </style>
 </head>
 <body>
 
-<div th:replace="template_page :: page-header"></div>
+<div th:replace="~{template_page :: page-header}"></div>
 
-<div class="indent">
-  <h3 class="text-center">Система управления складским учётом</h3>
-  <br>
-  <span class="text-center indent"> Сайт позволяет добавлять, редактировать, удалять и получать информацию о содержимом складов, поставках, поставщиках </span>
-  <br>
-  <div th:replace="template_page :: site-footer"></div>
+<div class="container mt-4">
+  <div class="welcome-section text-center">
+    <h2>Добро пожаловать в систему управления складом</h2>
+    <p class="lead">Управляйте товарами, операциями и партнерами в одном месте</p>
+  </div>
+
+  <!-- Карточки быстрого доступа -->
+  <div class="row">
+    <div class="col-md-4">
+      <a th:href="@{/operations}" class="card text-white bg-info dashboard-card text-decoration-none" id="MainOperationsLink">
+        <div class="card-body text-center">
+          <div class="card-icon">
+            <i class="fas fa-exchange-alt"></i>
+          </div>
+          <h4 class="card-title">Операции</h4>
+          <p class="card-text">Управление поставками и выдачами</p>
+        </div>
+      </a>
+    </div>
+
+    <div class="col-md-4">
+      <a th:href="@{/products}" class="card text-white bg-success dashboard-card text-decoration-none" id="MainProductsLink">
+        <div class="card-body text-center">
+          <div class="card-icon">
+            <i class="fas fa-boxes"></i>
+          </div>
+          <h4 class="card-title">Товары</h4>
+          <p class="card-text">Учет товаров на складе</p>
+        </div>
+      </a>
+    </div>
+
+    <div class="col-md-4">
+      <a th:href="@{/partners}" class="card text-white bg-warning dashboard-card text-decoration-none" id="MainPartnersLink">
+        <div class="card-body text-center">
+          <div class="card-icon">
+            <i class="fas fa-handshake"></i>
+          </div>
+          <h4 class="card-title">Партнеры</h4>
+          <p class="card-text">Управление поставщиками и клиентами</p>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <!-- Статистика -->
+  <div class="row mt-4">
+    <div class="col-md-4">
+      <div class="stats-card operations p-3">
+        <h5><i class="fas fa-exchange-alt text-info"></i> Операции</h5>
+        <p class="mb-1">Всего: <span th:text="${operationsCount ?: 0}" class="font-weight-bold"></span></p>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="stats-card products p-3">
+        <h5><i class="fas fa-boxes text-success"></i> Товары</h5>
+        <p class="mb-1">Всего: <span th:text="${productsCount ?: 0}" class="font-weight-bold"></span></p>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="stats-card partners p-3">
+        <h5><i class="fas fa-handshake text-warning"></i> Партнеры</h5>
+        <p class="mb-1">Всего: <span th:text="${partnersCount ?: 0}" class="font-weight-bold"></span></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Дополнительная информация -->
+  <div class="row mt-4">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          <i class="fas fa-chart-line"></i> Быстрый старт
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6">
+              <h5><i class="fas fa-question-circle text-primary"></i> Как начать работу?</h5>
+              <ol>
+                <li>Добавьте партнеров (поставщиков)</li>
+                <li>Добавьте товары на склад</li>
+                <li>Зарегистрируйте операции поступления</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
-<div th:replace="template_page :: site-script"></div>
+<div th:replace="~{template_page :: site-footer}"></div>
+
+<div th:replace="~{template_page :: site-script}"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
 
 </body>
 </html>

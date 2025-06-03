@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title th:text="${isEdit} ? 'Редактирование операции' : 'Добавление операции'"></title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <style>
+        .badge-in {
+            background-color: #28a745;
+            color: white;
+        }
+        .badge-out {
+            background-color: #dc3545;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="~{template_page :: page-header}"></div>
+
+<div class="container mt-4">
+    <h2 th:text="${isEdit} ? 'Редактирование операции' : 'Добавление операции'"></h2>
+
+    <form th:action="@{/operations/save}" method="post" th:object="${operation}">
+        <input type="hidden" th:field="*{id}">
+
+        <!-- Тип операции -->
+        <div class="form-group">
+            <label>Тип операции</label>
+            <select class="form-control" th:field="*{operationType}" required>
+                <option value="">-- Выберите тип --</option>
+                <option th:each="type : ${operationTypes}"
+                        th:value="${type}"
+                        th:text="${type.name() == 'in' ? 'Поступление' : 'Выдача'}">
+                </option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Партнёр</label>
+            <select class="form-control" name="partnerId" required>
+                <option value="">-- Выберите партнёра --</option>
+                <option th:each="partner : ${partners}"
+                        th:value="${partner.id}"
+                        th:text="${partner.name}">
+                </option>
+            </select>
+        </div>
+
+        <!-- Дата операции -->
+        <div class="form-group">
+            <label>Дата операции</label>
+            <input type="date" class="form-control" th:field="*{operationDate}">
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+            <span th:text="${isEdit} ? 'Обновить' : 'Добавить'"></span>
+        </button>
+        <a th:href="@{/operations}" class="btn btn-secondary">Отмена</a>
+    </form>
+</div>
+
+<div th:replace="~{template_page :: site-script}"></div>
+</body>
+</html>

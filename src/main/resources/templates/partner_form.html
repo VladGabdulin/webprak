@@ -7,7 +7,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 </head>
 <body>
-<div th:replace="template_page :: page-header"> </div>
+<div th:replace="~{template_page :: page-header}"> </div>
 
 <div class="container mt-4">
     <h2 th:text="${isEdit} ? 'Редактирование партнёра' : 'Добавление партнёра'"></h2>
@@ -17,21 +17,32 @@
 
         <div class="form-group">
             <label>Имя партнёра</label>
-            <input type="text" class="form-control" th:field="*{name}" required>
+            <input type="text" id="NamePartner" class="form-control" th:field="*{name}" required>
         </div>
 
         <div class="form-group">
             <label>Контактная информация</label>
-            <input type="text" class="form-control" th:field="*{contactInfo}" required>
+            <input type="text" id="ContactsPartner" class="form-control" th:field="*{contactInfo}" required>
         </div>
 
-        <button type="submit" class="btn btn-primary">
+        <div class="form-group">
+            <label>Тип партнёра</label>
+            <select class="form-control" id="TypePartner" th:field="*{partnerType}" required>
+                <option value="">-- Выберите тип --</option>
+                <option th:each="type : ${partnerTypes}"
+                        th:value="${type}"
+                        th:text="${#strings.capitalize(type.name().toLowerCase())}">
+                </option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary" id="submitButton">
             <span th:text="${isEdit} ? 'Обновить' : 'Добавить'"></span>
         </button>
         <a th:href="@{/partners}" class="btn btn-secondary">Отмена</a>
     </form>
 </div>
 
-<div th:replace="template_page :: site-script"></div>
+<div th:replace="~{template_page :: site-script}"></div>
 </body>
 </html>

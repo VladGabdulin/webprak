@@ -28,7 +28,7 @@
     </style>
 </head>
 <body>
-<div th:replace="template_page :: page-header"> </div>
+<div th:replace="~{template_page :: page-header}"> </div>
 
 <div class="indent">
     <div class="product-details">
@@ -53,27 +53,28 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="operationDetail : ${operationDetails}">
-                <td th:text="${operationDetailsService.getOperationByOperationDetails(operationDetail).getOperationDate()}"></td>
-                <td>
-                    <span th:if="${operationDetailsService.getOperationByOperationDetails(operationDetail).getOperationType().name() == 'in'}" class="badge badge-success">Поступление</span>
-                    <span th:if="${operationDetailsService.getOperationByOperationDetails(operationDetail).getOperationType().name() == 'out'}" class="badge badge-danger">Выдача</span>
-                </td>
-                <td th:text="${operationDetail.quantity}"></td>
-            </tr>
-            <tr th:if="${operationDetails} != null">
-                <tr th:if="${operationDetails.isEmpty()}">
+                <tr th:if="${operationDetails == null or operationDetails.isEmpty()}">
                     <td colspan="4">Нет данных об операциях</td>
                 </tr>
-            </tr>
-            <tr th:if="${operationDetails} == null">
-                <td colspan="4">Нет данных об операциях</td>
-            </tr>
+
+                <!-- Блок отображения операций -->
+                <tr th:unless="${operationDetails == null or operationDetails.isEmpty()}"
+                    th:each="operationDetail : ${operationDetails}">
+
+                    <td th:text="${operationDetailsService.getOperationByOperationDetails(operationDetail).operationDate}"></td>
+                    <td>
+                        <span th:if="${operationDetailsService.getOperationByOperationDetails(operationDetail).operationType.name() == 'in'}"
+                              class="badge badge-success">Поступление</span>
+                        <span th:if="${operationDetailsService.getOperationByOperationDetails(operationDetail).operationType.name() == 'out'}"
+                              class="badge badge-danger">Выдача</span>
+                    </td>
+                    <td th:text="${operationDetail.quantity}"></td>
+                </tr>
             </tbody>
         </table>
     </div>
 </div>
 
-<div th:replace="template_page :: site-script"></div>
+<div th:replace="~{template_page :: site-script}"></div>
 </body>
 </html>

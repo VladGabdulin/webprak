@@ -14,10 +14,10 @@
     </style>
 </head>
 <body>
-<div th:replace="template_page :: page-header"> </div>
+<div th:replace="~{template_page :: page-header}"> </div>
 
 <div class="indent">
-    <a th:href="@{/products/edit(productId=0)}" class="btn btn-primary">Добавить товар</a>
+    <a th:href="'/add_product'" class="btn btn-primary">Добавить товар</a>
     <br>
 
     <table class="table table-bordered table-warning">
@@ -31,7 +31,7 @@
         </thead>
         <tbody>
         <tr th:if="${products.isEmpty()}">
-            <td colspan="6"> В базе пока нет ни одного товара. <a th:href="'/products/edit?productId=' + 0">Добавить?</a></td>
+            <td colspan="6"> В базе пока нет ни одного товара. <a th:href="'/add_product'">Добавить?</a></td>
         </tr>
         <tr th:each="product : ${products}">
             <td>
@@ -58,7 +58,7 @@
     </table>
 </div>
 
-<div th:replace="template_page :: site-script"></div>
+<div th:replace="~{template_page :: site-script}"></div>
 
 </body>
 </html>
