@@ -47,9 +47,6 @@ public abstract class InheritedDAO<T extends InheritedInterface<ID>, ID extends 
 
     public void save(T entity) {
         try (Session session = sessionFactory.openSession()) {
-            if (entity.getId() != null) {
-                entity.setId(null);
-            }
             session.beginTransaction();
             session.saveOrUpdate(entity);
             session.getTransaction().commit();
@@ -88,6 +85,13 @@ public abstract class InheritedDAO<T extends InheritedInterface<ID>, ID extends 
             T entity = getById(id);
             session.delete(entity);
             session.getTransaction().commit();
+        }
+    }
+
+    public Long getCount(Class<T> entityClass) {
+        try (Session session = sessionFactory.openSession()) {
+            return session.createQuery("SELECT COUNT(*) FROM " + entityClass.getSimpleName(), Long.class)
+                    .getSingleResult();
         }
     }
 }

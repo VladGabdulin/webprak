@@ -1,11 +1,7 @@
 package com.cmc.sp.webprak.controllers;
 
-import com.cmc.sp.webprak.DAO.OperationDetailsDAO;
-import com.cmc.sp.webprak.DAO.PartnersDAO;
-import com.cmc.sp.webprak.DAO.ProductsDAO;
-import com.cmc.sp.webprak.classes.OperationDetails;
-import com.cmc.sp.webprak.classes.Partners;
-import com.cmc.sp.webprak.classes.Products;
+import com.cmc.sp.webprak.DAO.*;
+import com.cmc.sp.webprak.classes.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -18,15 +14,26 @@ public class MainController {
     private final ProductsDAO productsDAO;
     private final OperationDetailsDAO operationDetailsDAO;
     private final PartnersDAO partnersDAO;
+    private final OperationsDAO operationsDAO;
+    private final UsersDAO usersDAO;
 
-    public MainController(ProductsDAO productsDAO, OperationDetailsDAO operationDetailsDAO) {
+    public MainController(ProductsDAO productsDAO, OperationDetailsDAO operationDetailsDAO, PartnersDAO partnersDAO, OperationsDAO operationsDAO, UsersDAO usersDAO) {
         this.productsDAO = productsDAO;
         this.operationDetailsDAO = operationDetailsDAO;
-        this.partnersDAO = new PartnersDAO();
+        this.partnersDAO = partnersDAO;
+        this.operationsDAO = operationsDAO;
+        this.usersDAO = usersDAO;
     }
 
     @RequestMapping(value = { "/", "/main_page"})
-    public String main_page() {
+    public String main_page(Model model) {
+        long partnersCount = partnersDAO.getCount(Partners.class);
+        long productsCount = productsDAO.getCount(Products.class);
+        long operationsCount = operationsDAO.getCount(Operations.class);
+
+        model.addAttribute("partnersCount", partnersCount);
+        model.addAttribute("productsCount", productsCount);
+        model.addAttribute("operationsCount", operationsCount);
         return "main_page";
     }
 
@@ -63,12 +70,12 @@ public class MainController {
     public String showAddFormProduct(Model model) {
         model.addAttribute("product", new Products());
         model.addAttribute("isEdit", false);
-        return "product-form";
+        return "product_form";
     }
 
     @GetMapping("/products/edit")
     public String showEditFormProduct(@RequestParam("productId") Long productId, Model model) {
-        Products product = productId != 0 ? productsDAO.getById(productId) : new Products();
+        Products product = productsDAO.getById(productId);
         model.addAttribute("product", product);
         model.addAttribute("isEdit", true);
         return "product_form";
@@ -103,7 +110,6 @@ public class MainController {
         return "partner_form";
     }
 
-    // Страница редактирования товара
     @GetMapping("/partners/edit")
     public String showEditFormPartner(@RequestParam("partnerId") Long partnerId, Model model) {
         Partners partner = partnerId != 0 ? partnersDAO.getById(partnerId) : new Partners();
@@ -116,5 +122,62 @@ public class MainController {
     public String savePartner(@ModelAttribute Partners partner) {
         partnersDAO.save(partner);
         return "redirect:/partners";
+    }
+
+    @ModelAttribute("partnerTypes")
+    public Partners.PartnerType[] getPartnerTypes() {
+        return Partners.PartnerType.values();
+    }
+
+    @GetMapping("/operations")
+    public String showOperations(Model model) {
+        List<Operations> operations = (List<Operations>) operationsDAO.getAll();
+        model.addAttribute("operations", operations);
+        model.addAttribute("operationsService", operationsDAO);
+        model.addAttribute("operationDetailsService", operationDetailsDAO);
+        return "operations";
+    }
+
+    @GetMapping("/add_operation")
+    public String showAddFormOperation(Model model) {
+        model.addAttribute("operation", new Operations());
+        model.addAttribute("isEdit", false);
+        List<Partners> partners = (List<Partners>) partnersDAO.getAll();
+        model.addAttribute("partners", partners);
+        model.addAttribute("partnersService", partnersDAO);
+        return "operation_form";
+    }
+
+    @GetMapping("/operations/edit")
+    public String showEditFormOperation(@RequestParam("operationId") Long operationId, Model model) {
+        Operations operation = operationId != 0 ? operationsDAO.getById(operationId) : new Operations();
+        model.addAttribute("operation", operation);
+        model.addAttribute("isEdit", true);
+        List<Partners> partners = (List<Partners>) partnersDAO.getAll();
+        model.addAttribute("partners", partners);
+        model.addAttribute("partnersService", partnersDAO);
+        return "operation_form";
+    }
+
+    @ModelAttribute("operationTypes")
+    public Operations.OperationType[] getOperationTypes() {
+        return Operations.OperationType.values();
+    }
+
+    @PostMapping("/operations/save")
+    public String saveOperation(@ModelAttribute Operations operation, @RequestParam Long partnerId) {
+        Partners partner = partnersDAO.getById(partnerId);
+        operation.setPartner(partner);
+        operation.setUser(usersDAO.getById(1L));
+        operationsDAO.save(operation);
+        return "redirect:/operations";
+    }
+
+    @GetMapping("/")
+    public String home(Model model) {
+        model.addAttribute("operationsCount", operationsDAO.getCount(Operations.class));
+        model.addAttribute("productsCount", productsDAO.getCount(Products.class));
+        model.addAttribute("partnersCount", partnersDAO.getCount(Partners.class));
+        return "main_page";
     }
 }
